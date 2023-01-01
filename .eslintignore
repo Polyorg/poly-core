@@ -1,0 +1,6 @@
+.circleci
+coverage
+node_modules
+dist
+docker
+dotenv
