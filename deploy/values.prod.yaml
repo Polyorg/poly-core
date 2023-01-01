@@ -1,0 +1,78 @@
+env: &env prod
+name: &name poly-core
+deployment:
+  tag: latest
+namespace: poly-core
+serviceAccount: poly-core
+
+# daytona:
+#   k8sAuthMount: kubernetes-gcp-paas-product-prod-us-west1
+#   volumeName: vault-secrets
+#   mountPath: /home/vault
+#   image: gcr.io/cruise-gcr-prod/daytona:1.1.1
+
+app:
+  name: *name
+  environment: *env
+  environmentShort: prd
+  image:
+    repository: #Add Docker rigistry
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 1
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+      cpu: 4
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+
+service:
+  port: 80
+  targetPort: 5000
+  protocol: TCP
+
+ingress:
+  path: /
+  subDomain: *name
+  subDomainSuffix: *env
+  runscope_path: /_healthy
+
+cloudsqlProxy:
+  port: 5432
+  instanceName: &instance_name sentinel-cruise-product-prod-f7fe-7a37829490
+  credsPath: /credentials/credentials.json
+  volumeName: cloudsql
+  mountPath: /cloudsql
+  saVolumeName: cloudsql-service-account
+  saMountPath: /credentials
+
+configmap:
+  IN_GCP: "true"
+  ENVIRONMENT: "prod"
+  LOG_LEVEL: "info"
+  SERVICE_ACCOUNTS_BASE_URL: "https://sentinel-server.robot.car/service-account"
+  SKIP_CLOUD_PUBSUB: "false"
+  SENTINEL_S3_BUCKET: 'sentinel-prod-corp'
+  SENTINEL_AWS_ACCESS_KEY_ID: 'AKIAJDSGI5TNSLBRN66Q'
+  SENTINEL_AWS_REGION: 'us-west-2'
+  SENTINEL_AWS_ENDPOINT: 's3-us-west-2.amazonaws.com'
+  ENABLE_OAUTH: 'true'
+  STARFLEET_OAUTH_AUD: '0oab5ywgdtr0FDoSH1t7'
+  STARFLEET_OAUTH_CLIENT_ID: '0oab5ywgdtr0FDoSH1t7'
+  ENABLE_JWT_AUTHN: 'true'
+  CLOUD_SQL_DATABASE: *instance_name
+  GCP_PROJECT: "cruise-product-prod-f7fe"
+  SERVICE_NAME: *name
+  GCP_REGION: "us-west1"
+  DEVICE_AUTHZ_APPLICATION_NAME: 'sentinel-device'
+  SENTINEL_GITHUB_BASE_URL: "https://api.github.robot.car"
+  ENABLE_BRIDGE_VERSIONS: 'false'
+  CRUISE_STABLE_APP_ID: 'e2e5c7ca-695c-41e8-8a85-282d37c4eb8a'
+  SENTINEL_SERVER_GCS_BUCKET: 'sentinel-server-prod'
+  ENABLE_GCS_BUCKET: 'true'

@@ -1,13 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata:
-  name: {{ include "deploy.fullname" . }}
-  labels:
-    {{- include "deploy.labels" . | nindent 4 }}
+metadata: {{ include "metadata" . | indent 2 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.app.replicas }}
   selector:
     matchLabels:
       {{- include "deploy.selectorLabels" . | nindent 6 }}

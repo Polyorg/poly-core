@@ -33,3 +33,15 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Openapi Generated files
+spec/node_modules
+spec/sentinel-node
+spec/sentinel-kotlin
+spec/sentinel-axios
+spec/sentinel-openapi-generated.json
+
+junit
+.env
+.env.secret
+credentials

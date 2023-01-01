@@ -1,15 +1,11 @@
 apiVersion: v1
 kind: Service
-metadata:
-  name: {{ include "deploy.fullname" . }}
-  labels:
-    {{- include "deploy.labels" . | nindent 4 }}
+metadata: {{ include "metadata" . | indent 2 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
       name: http
-  selector:
-    {{- include "deploy.selectorLabels" . | nindent 4 }}
+  selector: {{ - include "deploy.selectorLabels" . | nindent 4 }}

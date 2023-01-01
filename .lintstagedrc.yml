@@ -1,0 +1,6 @@
+'*.{ts,js}':
+  - organize-imports-cli
+  - npm run format:base -- --write
+  - npm run lint:base -- --fix
+'*.{json,yml,md}':
+  - npm run format:base -- --write

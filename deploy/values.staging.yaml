@@ -1,0 +1,76 @@
+env: &env staging
+name: &name poly-core
+deployment:
+  tag: &tag latest
+namespace: poly-core
+serviceAccount: poly-core
+
+# daytona:
+#   k8sAuthMount: kubernetes-gcp-paas-product-staging-us-west1
+#   volumeName: vault-secrets
+#   mountPath: /home/vault
+#   image: gcr.io/cruise-gcr-dev/daytona:1.1.1
+
+app:
+  name: *name
+  environment: *env
+  environmentShort: stg
+  image:
+    repository: ""
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+  replicas: 1 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+
+service:
+  port: 80
+  targetPort: 5000
+  protocol: TCP
+
+ingress:
+  path: /
+  subDomain: *name
+  subDomainSuffix: *env
+  runscope_path: /_healthy
+
+cloudsqlProxy:
+  port: 5432
+  instanceName: &instance_name sentinel-cruise-product-staging-6260-e82d827a73
+  credsPath: /credentials/credentials.json
+  volumeName: cloudsql
+  mountPath: /cloudsql
+  saVolumeName: cloudsql-service-account
+  saMountPath: /credentials
+
+configmap:
+  IN_GCP: "true"
+  ENVIRONMENT: "staging"
+  LOG_LEVEL: "debug"
+  SERVICE_ACCOUNTS_BASE_URL: "https://sentinel-server.robot.car/service-account"
+  SKIP_CLOUD_PUBSUB: "false"
+  SENTINEL_S3_BUCKET: 'sentinel-staging-dev'
+  SENTINEL_AWS_ACCESS_KEY_ID: 'AKIAJY65O6GXPCO52IFA'
+  SENTINEL_AWS_REGION: 'us-west-2'
+  SENTINEL_AWS_ENDPOINT: 's3-us-west-2.amazonaws.com'
+  ENABLE_OAUTH: 'true'
+  STARFLEET_OAUTH_AUD: '0oab5z2pumEMosRTr1t7'
+  STARFLEET_OAUTH_CLIENT_ID: '0oab5z2pumEMosRTr1t7'
+  ENABLE_JWT_AUTHN: 'true'
+  CLOUD_SQL_DATABASE: *instance_name
+  GCP_PROJECT: "cruise-product-staging-6260"
+  SERVICE_NAME: *name
+  GCP_REGION: "us-west1"
+  DEVICE_AUTHZ_APPLICATION_NAME: 'sentinel-device-dev'
+  SENTINEL_GITHUB_BASE_URL: "https://api.github.robot.car"
+  ENABLE_BRIDGE_VERSIONS: 'false'
+  CRUISE_STABLE_APP_ID: 'cb8960b9-9d3a-477a-a857-32900c70bd39'
+  SENTINEL_SERVER_GCS_BUCKET: 'sentinel-server-staging'
+  ENABLE_GCS_BUCKET: 'true'

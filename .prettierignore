@@ -1,0 +1,10 @@
+/deploy
+/node_modules
+.prettierrc
+.eslintrc.js
+package.json
+pnpm-lock.yaml
+tsconfig.*.json
+.env*
+.npmrc
+.nvmrc

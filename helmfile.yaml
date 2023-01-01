@@ -1,0 +1,23 @@
+templates:
+  default: &default
+    namespace: poly-core 
+    chart: deploy/{{`{{ .Release.Name }}`}}
+    values:
+      - deploy/values.{{`{{ .Environment.Name }}`}}.yaml
+      - deployment:
+          tag: {{ exec "git" (list "rev-parse" "HEAD") }}
+
+helmDefaults:
+  createNamespace: false
+
+environments:
+  staging: 
+    values:
+      - values.staging.yaml
+  prod:
+    values:
+      - values.prod.yaml
+
+releases:
+  - name: poly-core
+    <<: *default
