@@ -57,6 +57,16 @@ jobs:
           name: 'Prettier'
           command: 'pnpm format'
 
+  deploy:
+    <<: *default
+    steps:
+      - checkout
+      - <<: *install-pnpm
+      - <<: *install-packages
+      - run:
+          name: 'Deploy'
+          command: 'echo Deploying'
+
 orbs:
   node: circleci/node@5.0.3
   codecov: codecov/codecov@3
@@ -67,3 +77,13 @@ workflows:
       - tests
       - eslint
       - prettier
+      - deploy:
+          requires:
+            - build
+            - tests
+            - eslint
+            - prettier
+          filters:
+            branches:
+              only:
+                - main
