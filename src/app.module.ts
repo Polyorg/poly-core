@@ -1,16 +1,36 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-// import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-// import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule } from '@nestjs/graphql';
 import { PolyLoggerModule } from '@polyorg/nest';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+import { DirectiveLocation, GraphQLDirective } from 'graphql';
+import { join } from 'path';
+import { OrganizationModule } from './core/organization/organization.module';
+import { TeamsModule } from './core/teams/teams.module';
 
 @Module({
   imports: [
-    // GraphQLModule.forRoot({})
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
+      installSubscriptionHandlers: true,
+      context: ({ req }) => ({ req }),
+      buildSchemaOptions: {
+        directives: [
+          new GraphQLDirective({
+            name: 'upper',
+            locations: [DirectiveLocation.FIELD_DEFINITION],
+          }),
+        ],
+      },
+    }),
     PolyLoggerModule.register('poly-core'),
+    TeamsModule,
+    OrganizationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

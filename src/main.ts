@@ -1,8 +1,7 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from 'src/app.module';
 // import { MicroserviceOptions } from '@nestjs/microservices';
-import { LoggerInterceptor } from '@polyorg/nest';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,7 +23,7 @@ async function bootstrap() {
   // Global interceptors
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector)),
-    new LoggerInterceptor('poly-core'),
+    // new LoggerInterceptor('poly-core'),
   );
 
   // Validation

@@ -1,0 +1,53 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+type Team {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Organization {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  teams: [Team!]!
+  team(id: Int!): Team!
+  organizations: [Organization!]!
+  organization(id: Int!): Organization!
+}
+
+type Mutation {
+  createTeam(createTeamInput: CreateTeamInput!): Team!
+  updateTeam(updateTeamInput: UpdateTeamInput!): Team!
+  removeTeam(id: Int!): Team!
+  createOrganization(createOrganizationInput: CreateOrganizationInput!): Organization!
+  updateOrganization(updateOrganizationInput: UpdateOrganizationInput!): Organization!
+  removeOrganization(id: Int!): Organization!
+}
+
+input CreateTeamInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTeamInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrganizationInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrganizationInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
