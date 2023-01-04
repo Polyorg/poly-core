@@ -4,12 +4,12 @@
 
 directive @upper on FIELD_DEFINITION
 
-type Team {
+type Organization {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-type Organization {
+type Team {
   """Example field (placeholder)"""
   exampleField: Int!
 }
